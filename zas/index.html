@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Área Restrita</title>
+  <title>...</title>
   <style>
     body {
       background-color: black;
@@ -39,9 +39,9 @@
     }
   </style>
 </head>
-<body>
+<body onclick="tocarMusica()">
 
-  <h1>Área Restrita</h1>
+  <h1>痛み。</h1>
   <p>Dica: O nome dela.</p>
 
   <input type="password" id="senha" placeholder="Senha">
@@ -50,6 +50,9 @@
 
   <div id="erro"></div>
 
+  <!-- Áudio escondido -->
+  <audio id="musica" src="musicasenha.mp3" preload="auto"></audio>
+
   <script>
     function verificar() {
       const senha = document.getElementById("senha").value.trim().toLowerCase();
@@ -57,8 +60,15 @@
       if (senha === correta) {
         window.location.href = "inicio.html"; // <- seu link
       } else {
-        document.getElementById("erro").textContent = "Errado.";
+        document.getElementById("erro").textContent = "彼女の名前。";
       }
+    }
+
+    function tocarMusica() {
+      const audio = document.getElementById("musica");
+      audio.volume = 0.4; // Volume ajustado
+      audio.play().catch(() => {});
+      document.body.onclick = null; // impede tocar novamente
     }
   </script>
 
