@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Será?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .audio-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      padding: 6px 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      opacity: 0.6;
+      z-index: 10;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .audio-player:hover {
+      opacity: 1;
+    }
+
+    .audio-player input[type="range"] {
+      width: 100px;
+    }
+
+    .wrapper {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 40px 60px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.11);
+      transform-style: preserve-3d;
+      transition: transform 30s ease;
+      animation: fadeIn 30s ease;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 30s, background-color 30s;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .yes {
+      background-color: #f07c9069;
+      color: white;
+    }
+
+    .no {
+      background-color: #736be465;
+      color: #ffffff;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Vídeo de fundo com som -->
+  <video autoplay loop playsinline id="bgVideo">
+    <source src="video.mp4" type="video/mp4">
+    Seu navegador não suporta vídeo em HTML5.
+  </video>
+
+  <!-- Player de volume para o vídeo -->
+  <div class="audio-player">
+    <input type="range" min="0" max="1" step="0.01" value="0.1" onchange="adjustVolume(this)">
+    <button onclick="toggleVideo()">▶️</button>
+  </div>
+
+  <div class="wrapper">
+    <div class="container" id="card">
+      <h1>Amanda, quer namorar comigo?</h1>
+      <div class="buttons">
+        <button class="yes" onclick="location.href='sim.html'">Sim 💖</button>
+        <button class="no" onclick="alert('ليس لديك هذا الخيار')">Não 😢</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById('bgVideo');
+
+    window.addEventListener('load', () => {
+      video.volume = 0.1; // volume inicial baixo
+    });
+
+    function adjustVolume(slider) {
+      video.volume = slider.value;
+    }
+
+    function toggleVideo() {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    const card = document.getElementById('card');
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 30;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 30;
+      card.style.transform = `rotateY(${x}deg) rotateX(${-y}deg) scale(0.98)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `rotateY(0deg) rotateX(0deg) scale(1)`;
+    });
+  </script>
+
+</body>
+</html>
