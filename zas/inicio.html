@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Oi rs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      text-align: center;
+      padding: 30px;
+      perspective: 1000px;
+    }
+
+    body.main-visible {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('fundo.gif') no-repeat center center;
+      background-size: cover;
+      transition: background-position 0.1s ease;
+    }
+
+    #intro-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #020102;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      cursor: pointer;
+    }
+
+    #intro-overlay img {
+      width: 120px;
+      height: 120px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+      }
+    }
+
+    .container-opaco {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 15px;
+      padding: 30px 40px;
+      max-width: 800px;
+      width: 100%;
+      min-height: 250px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.1s ease;
+      will-change: transform;
+    }
+
+    .container-opaco.visible {
+      display: flex;
+    }
+
+    #cliqueParaComecar {
+      font-size: 1.6em;
+      color: #fff;
+      animation: blink 1.5s infinite;
+      margin: 0;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1, p, button {
+      display: none;
+      opacity: 0;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease;
+    }
+
+    h1.mostrarTitulo {
+      display: block;
+      animation-name: fadeIn;
+      animation-duration: 2.8s;
+    }
+
+    p.mostrarTexto {
+      display: block;
+      animation-name: fadeIn;
+      animation-duration: 3s;
+      animation-delay: 0.8s;
+      margin-top: 20px;
+      margin-bottom: 30px;
+      font-size: 1.2em;
+    }
+
+    button.mostrar {
+      display: inline-block;
+      animation-name: fadeIn;
+      animation-duration: 3s;
+      animation-delay: 1.8s;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      background-color: #f88b9d23;
+      color: white;
+      cursor: pointer;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+      margin-top: 10px;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(60px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2));
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 10px 16px;
+      opacity: 0.6;
+      font-size: 0.9em;
+      color: #fff;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 10;
+    }
+
+    #player:hover {
+      opacity: 0.95;
+      transform: scale(1.02);
+    }
+
+    #player input[type="range"] {
+      width: 100px;
+      margin-left: 8px;
+      cursor: pointer;
+      accent-color: #ff5e78;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Tela preta com o olho -->
+  <div id="intro-overlay" onclick="iniciarSite()">
+    <img src="gifolho.gif" alt="Olho" />
+  </div>
+
+  <!-- Conteúdo original -->
+  <div class="container-opaco" id="container" onclick="mostrarConteudo()">
+    <div id="cliqueParaComecar">Clique para continuar</div>
+    <h1 id="titulo">Oi, Amandinha 🌹</h1>
+    <p id="mensagem">Eu quero te dizer que eu gosto muito de você, você é uma pessoa incrivel, e eu estou amando passar cada momento com você. fiz algo simples, mas que fosse signifcar de alguma forma, e com isso, quero te perguntar algo!</p>
+    <button id="continuar" onclick="irParaPedido(event)">Clique aqui para continuar</button>
+  </div>
+
+  <!-- Player de Música -->
+  <div id="player">
+    🎵 Volume
+    <input type="range" min="0" max="1" step="0.01" value="0.5" onchange="ajustarVolume(this.value)">
+  </div>
+
+  <audio id="musica" autoplay muted preload="auto" loop>
+    <source src="musica.mp3" type="audio/mpeg" />
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <!-- Áudio do efeito sonoro -->
+  <audio id="soundeffect" preload="auto">
+    <source src="soundeffect.mp3" type="audio/mpeg" />
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    let clicou = false;
+
+    function iniciarSite() {
+      // Tocar o efeito sonoro antes de ocultar o overlay
+      const efeito = document.getElementById('soundeffect');
+      efeito.currentTime = 0;
+      efeito.play().catch(e => console.log('Erro efeito sonoro:', e));
+
+      // Para garantir que a transição aconteça após o som começar
+      efeito.onplay = () => {
+        document.getElementById('intro-overlay').style.display = 'none';
+        document.body.classList.add('main-visible');
+        document.getElementById('container').classList.add('visible');
+
+        // Toca a música principal
+        const musica = document.getElementById('musica');
+        musica.muted = false;
+        musica.volume = 0.5;
+        musica.play().catch(err => console.warn("Erro ao iniciar música:", err));
+      };
+    }
+
+    function mostrarConteudo() {
+      if (clicou) return;
+      clicou = true;
+
+      const cliqueTexto = document.getElementById('cliqueParaComecar');
+      const titulo = document.getElementById('titulo');
+      const texto = document.getElementById('mensagem');
+      const botao = document.getElementById('continuar');
+      const musica = document.getElementById('musica');
+
+      cliqueTexto.style.display = 'none';
+
+      titulo.classList.add('mostrarTitulo');
+      texto.classList.add('mostrarTexto');
+      botao.classList.add('mostrar');
+
+      musica.volume = 0.5;
+      musica.play().catch(err => console.log("Erro ao reproduzir:", err));
+      setTimeout(() => {
+        musica.muted = false;
+        musica.play().catch(err => console.warn("Erro ao desmutar:", err));
+      }, 2000);
+    }
+
+    function irParaPedido(e) {
+      e.stopPropagation();
+      window.location.href = 'inicio2.html';
+    }
+
+    function ajustarVolume(valor) {
+      document.getElementById('musica').volume = valor;
+    }
+
+    const container = document.getElementById('container');
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const deltaX = (x - centerX) / centerX;
+      const deltaY = (y - centerY) / centerY;
+      const rotateX = deltaY * 7;
+      const rotateY = deltaX * 7;
+      container.style.transform = `rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+
+    container.addEventListener('mouseleave', () => {
+      container.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+    });
+
+    document.body.addEventListener('mousemove', (e) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      const maxMove = 15;
+      const bgPosX = 50 + (x - 0.5) * maxMove;
+      const bgPosY = 50 + (y - 0.5) * maxMove;
+      document.body.style.backgroundPosition = `${bgPosX}% ${bgPosY}%`;
+    });
+  </script>
+</body>
+</html>
